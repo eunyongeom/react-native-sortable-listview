@@ -1,5 +1,5 @@
 import React from 'react-native';
-import TimerMixin from 'react-timer-mixin';
+import TimerMixin from 'react-native-timer-mixin';
 
 var {
   ListView,
@@ -325,7 +325,7 @@ var SortableListView = React.createClass({
             this._scrolling = true;
             this.scrollContainerHeight = e.nativeEvent.contentSize.height;
           }
-          
+
           if (this.props.onScroll) this.props.onScroll(e);
         }}
         onScrollAnimationEnd={() => this._scrolling = false}
