@@ -10,6 +10,9 @@
     "type": "git",
     "url": "git+https://github.com/deanmcpherson/react-native-sortable-listview.git"
   },
+  "dependencies": {
+    "react-native-timer-mixin": "^0.11.0"
+  },
   "keywords": [
     "react-component",
     "ios",
