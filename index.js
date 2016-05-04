@@ -56,10 +56,8 @@ var SortRow = React.createClass({
         position: 'absolute',
         left: 0,
         right: 0,
-        opacity: .2,
         height: layout.frameHeight,
         overflow: 'hidden',
-        backgroundColor: 'transparent',
         marginTop: layout.pageY - wrapperLayout.pageY //Account for top bar spacing
       }
     }
