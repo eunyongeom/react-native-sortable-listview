@@ -178,8 +178,8 @@ var SortableListView = React.createClass({
         let layout = {frameX, frameY, frameWidth, frameHeight, pageX, pageY};
         this.wrapperLayout = layout;
       });
-    }, 1);
-
+      /* increase timeout as animation of view loading seems to disrupt pageY */
+    }, 1000);
   },
   scrollValue: 0,
   scrollContainerHeight: HEIGHT * 1.2, //Gets calculated on scroll, but if you havent scrolled needs an initial value
