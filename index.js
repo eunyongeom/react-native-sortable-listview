@@ -316,6 +316,11 @@ var SortableListView = React.createClass({
   getScrollResponder: function() {
     return this.scrollResponder;
   },
+  contentSizeChanged: function(width, height) {
+    if (!this.props.isReordering) {
+      this.scrollContainerHeight = height;
+    }
+  },
   render: function() {
     let dataSource = this.state.ds.cloneWithRows(this.props.data, this.props.order);
     return <View ref="wrapper" style={{flex: 1}} onLayout={()=>{}}>
@@ -339,6 +344,7 @@ var SortableListView = React.createClass({
         onLayout={(e) => this.listLayout = e.nativeEvent.layout}
         scrollEnabled={!this.state.active}
         renderRow={this.renderRow}
+        onContentSizeChange={this.contentSizeChanged}
       />
       {this.renderActive()}
     </View>
