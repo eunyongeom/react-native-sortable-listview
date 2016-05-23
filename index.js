@@ -148,12 +148,10 @@ var SortableListView = React.createClass({
           });
         }
 
-        /* this appears to cause issues, moves the active row to the bottom
-        of the list */
-        // let MAX_HEIGHT = Math.max(0, this.scrollContainerHeight - HEIGHT);
-        // if (this.scrollValue > MAX_HEIGHT) {
-        //   this.scrollResponder.scrollTo({y: MAX_HEIGHT});
-        // }
+        let MAX_HEIGHT = Math.max(0, this.scrollContainerHeight - HEIGHT);
+        if (this.scrollValue > MAX_HEIGHT) {
+          this.scrollResponder.scrollTo({y: MAX_HEIGHT});
+        }
 
         this.state.active = false;
         this.state.hovering = false;
