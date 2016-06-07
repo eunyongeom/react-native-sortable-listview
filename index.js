@@ -117,6 +117,7 @@ var SortableListView = React.createClass({
           this.state.pan.setValue(currentPanValue);
       },
       onPanResponderRelease: (e) => {
+        this.moveY = undefined;
         this.moved = false;
         this.props.onMoveEnd && this.props.onMoveEnd();
         if (!this.state.active) {
