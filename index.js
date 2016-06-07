@@ -29,7 +29,7 @@ var Row = React.createClass({
       });
     });
     // let parent component know reordering has started
-    this.props.onStartReordering();
+    this.props.onStartReordering && this.props.onStartReordering();
   },
   measure: function() {
     return this.refs.view.measure.apply(this, Array.from(arguments));
@@ -165,7 +165,7 @@ var SortableListView = React.createClass({
   cancel: function() {
     if (!this.moved) {
       // let parent component know reordering finished
-      this.props.onFinishReordering();
+      this.props.onFinishReordering && this.props.onFinishReordering();
       this.setState({
         active: false,
         hovering: false
