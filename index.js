@@ -1,7 +1,7 @@
-import React from 'react-native';
+import React from 'react';
 import TimerMixin from 'react-native-timer-mixin';
 
-var {
+import {
   ListView,
   LayoutAnimation,
   View,
