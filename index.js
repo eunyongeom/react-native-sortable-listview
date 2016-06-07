@@ -9,7 +9,7 @@ var {
   Dimensions,
   PanResponder,
   TouchableWithoutFeedback
-} = React;
+} from 'react-native';
 
 let HEIGHT = Dimensions.get('window').height;
 var Row = React.createClass({
@@ -66,7 +66,7 @@ var SortRow = React.createClass({
   },
   render: function() {
      let handlers = this.props.panResponder.panHandlers;
-    return <Animated.View ref="view" style={[this.state.style, this.props.list.state.pan.getLayout()]}>
+    return <Animated.View ref="view" style={[this.state.style, this.props.sortRowStyle, this.props.list.state.pan.getLayout()]}>
       <View style={{opacity: .85, flex: 1}}>
         {this.props.renderRow(this.props.rowData.data, this.props.rowData.section, this.props.rowData.index, true, null, true)}
       </View>
@@ -102,7 +102,7 @@ var SortableListView = React.createClass({
         let vy = Math.abs(a.vy);
         let vx = Math.abs(a.vx);
 
-        return (vy ) > vx;
+        return (vy) > vx  && this.state.active;
       },
       onPanResponderMove: (evt, gestureState) => {
         gestureState.dx = 0;
@@ -112,12 +112,13 @@ var SortableListView = React.createClass({
 
        onPanResponderGrant: (e, gestureState) => {
           this.moved = true;
-
+          this.props.onMoveStart &&  this.props.onMoveStart();
           this.state.pan.setOffset(currentPanValue);
           this.state.pan.setValue(currentPanValue);
       },
       onPanResponderRelease: (e) => {
         this.moved = false;
+        this.props.onMoveEnd && this.props.onMoveEnd();
         if (!this.state.active) {
           if (this.state.hovering) this.setState({hovering: false});
           return;
