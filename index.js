@@ -51,6 +51,7 @@ var Row = React.createClass({
 var SortRow = React.createClass({
   getInitialState: function() {
     let layout = this.props.list.state.active.layout;
+    let touch = this.props.list.state.active.touch;
     let wrapperLayout = this.props.list.wrapperLayout;
 
     return {
@@ -60,7 +61,7 @@ var SortRow = React.createClass({
         right: 0,
         height: layout.frameHeight,
         overflow: 'hidden',
-        marginTop: layout.pageY - wrapperLayout.pageY //Account for top bar spacing
+        marginTop: touch.pageY - (layout.frameHeight / 2) - wrapperLayout.pageY //Account for top bar spacing
       }
     }
   },
