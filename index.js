@@ -173,15 +173,17 @@ var SortableListView = React.createClass({
       });
     }
   },
+  measureWrapper: function() {
+    this.refs.wrapper.measure((frameX, frameY, frameWidth, frameHeight, pageX, pageY) => {
+
+      let layout = {frameX, frameY, frameWidth, frameHeight, pageX, pageY};
+      this.wrapperLayout = layout;
+    });
+  },
   componentDidMount: function() {
     setTimeout(()=>{
       this.scrollResponder = this.refs.list.getScrollResponder();
-      this.refs.wrapper.measure((frameX, frameY, frameWidth, frameHeight, pageX, pageY) => {
-
-        let layout = {frameX, frameY, frameWidth, frameHeight, pageX, pageY};
-        this.wrapperLayout = layout;
-      });
-      /* increase timeout as animation of view loading seems to disrupt pageY */
+      this.measureWrapper();
     }, 1000);
   },
   scrollValue: 0,
@@ -189,23 +191,25 @@ var SortableListView = React.createClass({
   scrollAnimation: function() {
     if (this.isMounted() && this.state.active) {
       if (this.moveY == undefined) return this.requestAnimationFrame(this.scrollAnimation);
-
+      // top of listview
       let SCROLL_OFFSET = this.wrapperLayout.pageY;
+      let SCROLL_ZONE = 80;
       let moveY = this.moveY - SCROLL_OFFSET;
-      let SCROLL_LOWER_BOUND = 80 + SCROLL_OFFSET;
+      let SCROLL_LOWER_BOUND = SCROLL_ZONE;
       let SCROLL_HIGHER_BOUND = this.listLayout.height - SCROLL_LOWER_BOUND;
-
-      let MAX_SCROLL_VALUE = this.scrollContainerHeight - HEIGHT + (this.state.active.layout.frameHeight * 2);
+      let MAX_SCROLL_VALUE = this.scrollContainerHeight - HEIGHT + (this.state.active.layout.frameHeight / 2) + SCROLL_ZONE;
       let currentScrollValue = this.scrollValue;
       let newScrollValue = null;
       let SCROLL_MAX_CHANGE = 20;
 
+      // scroll up
       if (moveY < SCROLL_LOWER_BOUND && currentScrollValue > 0) {
         let PERCENTAGE_CHANGE = 1 - (moveY / SCROLL_LOWER_BOUND);
           newScrollValue = currentScrollValue - (PERCENTAGE_CHANGE * SCROLL_MAX_CHANGE);
           if (newScrollValue < 0) newScrollValue = 0;
 
       }
+      // scroll down
       if (moveY > SCROLL_HIGHER_BOUND && currentScrollValue < MAX_SCROLL_VALUE) {
         let PERCENTAGE_CHANGE = 1 - ((this.listLayout.height - moveY) / SCROLL_LOWER_BOUND);
         newScrollValue = currentScrollValue + (PERCENTAGE_CHANGE * SCROLL_MAX_CHANGE);
