@@ -257,7 +257,7 @@ var SortableListView = React.createClass({
       i += row.height;
       x++;
     }
-    if (!isLast) x--;
+    if (!isLast && x > 0) x--;
     if (x != this.state.hovering) {
       LayoutAnimation.easeInEaseOut();
       this._previouslyHovering = this.state.hovering;
