@@ -181,10 +181,7 @@ var SortableListView = React.createClass({
     });
   },
   componentDidMount: function() {
-    setTimeout(()=>{
-      this.scrollResponder = this.refs.list.getScrollResponder();
-      this.measureWrapper();
-    }, 1000);
+    this.scrollResponder = this.refs.list.getScrollResponder();
   },
   scrollValue: 0,
   scrollContainerHeight: HEIGHT * 1.2, //Gets calculated on scroll, but if you havent scrolled needs an initial value
@@ -346,7 +343,10 @@ var SortableListView = React.createClass({
           if (this.props.onScroll) this.props.onScroll(e);
         }}
         onScrollAnimationEnd={() => this._scrolling = false}
-        onLayout={(e) => this.listLayout = e.nativeEvent.layout}
+        onLayout={(e) => {
+          this.listLayout = e.nativeEvent.layout;
+          this.measureWrapper();
+        }}
         scrollEnabled={!this.state.active}
         renderRow={this.renderRow}
         onContentSizeChange={this.contentSizeChanged}
