@@ -102,8 +102,7 @@ var SortableListView = React.createClass({
         //Only capture when moving vertically, this helps for child swiper rows.
         let vy = Math.abs(a.vy);
         let vx = Math.abs(a.vx);
-
-        return (vy) > vx  && this.state.active;
+        return (vy) > vx;
       },
       onPanResponderMove: (evt, gestureState) => {
         gestureState.dx = 0;
@@ -112,12 +111,30 @@ var SortableListView = React.createClass({
        },
 
        onPanResponderGrant: (e, gestureState) => {
+          this.startY = gestureState.y0;
+          this.startScroll = this.refs.list.scrollProperties.offset;
           this.moved = true;
           this.props.onMoveStart &&  this.props.onMoveStart();
           this.state.pan.setOffset(currentPanValue);
           this.state.pan.setValue(currentPanValue);
       },
       onPanResponderRelease: (e) => {
+        console.log('startY:' +this.startY)
+        console.log('moveY: '+this.moveY)
+        console.log('startScroll:' +this.startScroll)
+        console.log('newScroll:' +this.refs.list.scrollProperties.offset)
+        if (
+          this.refs.list.scrollProperties.offset === 0
+          && this.startScroll === 0
+          && (this.startY - this.moveY) < -100
+        ) {
+          /*
+          need to know where scroll started. DONE
+          maybe where it finishes as well to ensure a certain distance has passed DONE
+          only want to kick off if listview wasnt scrolled DONE
+          TODO prevent multiple refresh attempts? ie. delay between perhaps */
+          this.props.startRefresh && this.props.startRefresh();
+        }
         this.moveY = undefined;
         this.moved = false;
         this.props.onMoveEnd && this.props.onMoveEnd();
@@ -347,6 +364,7 @@ var SortableListView = React.createClass({
           this.listLayout = e.nativeEvent.layout;
           this.measureWrapper();
         }}
+        scrollEventThrottle={1}
         scrollEnabled={!this.state.active}
         renderRow={this.renderRow}
         onContentSizeChange={this.contentSizeChanged}
