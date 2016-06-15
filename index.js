@@ -111,32 +111,26 @@ var SortableListView = React.createClass({
        },
 
        onPanResponderGrant: (e, gestureState) => {
-          this.startY = gestureState.y0;
-          this.startScroll = this.refs.list.scrollProperties.offset;
+          this.startScroll = this.scrollValue;
           this.moved = true;
           this.props.onMoveStart &&  this.props.onMoveStart();
           this.state.pan.setOffset(currentPanValue);
           this.state.pan.setValue(currentPanValue);
       },
       onPanResponderRelease: (e) => {
-        console.log('startY:' +this.startY)
-        console.log('moveY: '+this.moveY)
-        console.log('startScroll:' +this.startScroll)
-        console.log('newScroll:' +this.refs.list.scrollProperties.offset)
+        // detect pull down to refresh
         if (
-          this.refs.list.scrollProperties.offset === 0
-          && this.startScroll === 0
-          && (this.startY - this.moveY) < -100
+          // if scroll began from top and pulled down at least 150px
+          this.startScroll < 1 &&
+          this.refs.list.scrollProperties.offset < -150
         ) {
-          /*
-          need to know where scroll started. DONE
-          maybe where it finishes as well to ensure a certain distance has passed DONE
-          only want to kick off if listview wasnt scrolled DONE
-          TODO prevent multiple refresh attempts? ie. delay between perhaps */
+          // tell parent component to kick off refresh
           this.props.startRefresh && this.props.startRefresh();
         }
         this.moveY = undefined;
         this.moved = false;
+        // let parent component know reordering finished
+        this.props.onFinishReordering && this.props.onFinishReordering();
         this.props.onMoveEnd && this.props.onMoveEnd();
         if (!this.state.active) {
           if (this.state.hovering) this.setState({hovering: false});
@@ -364,7 +358,7 @@ var SortableListView = React.createClass({
           this.listLayout = e.nativeEvent.layout;
           this.measureWrapper();
         }}
-        scrollEventThrottle={1}
+        scrollEventThrottle={0}
         scrollEnabled={!this.state.active}
         renderRow={this.renderRow}
         onContentSizeChange={this.contentSizeChanged}
