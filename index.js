@@ -120,9 +120,9 @@ var SortableListView = React.createClass({
       onPanResponderRelease: (e) => {
         // detect pull down to refresh
         if (
-          // if scroll began from top and pulled down at least 150px
+          // if scroll began from top and pulled down at least 50px
           this.startScroll < 1 &&
-          this.refs.list.scrollProperties.offset < -150
+          this.refs.list.scrollProperties.offset < -50
         ) {
           // tell parent component to kick off refresh
           this.props.startRefresh && this.props.startRefresh();
