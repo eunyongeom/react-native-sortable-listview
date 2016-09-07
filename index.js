@@ -262,7 +262,9 @@ var SortableListView = React.createClass({
         isLast = true;
         break;
       }
-      i += row.height;
+      i += row.height/2;
+      if(x>0)
+      {i += this.layoutMap[order[x-1]].height/2;}
       x++;
     }
     if (!isLast && x > 0) x--;
