@@ -7,6 +7,7 @@ Note that this quite raw still, and is not recommended for production use. BREAK
 
 1. Run `npm install react-native-sortable-listview --save`
 2. `var SortableListView = require('react-native-sortable-listview');`
+3. hello, this is test.
 
 ## Demo
 
